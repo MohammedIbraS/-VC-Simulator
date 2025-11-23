@@ -1,0 +1,150 @@
+---
+alwaysApply: true
+---
+
+# Tourism VC Simulator - Project Structure
+
+## Overview
+This is a Streamlit-based web application for simulating and comparing two Virtual Clinic (VC) scenarios for tourism insurance. The application provides interactive 3D visualizations and detailed KPI analysis.
+
+## Directory Structure
+
+```
+tourism_vc_simulator/
+├── cursor/
+│   └── rules/
+│       ├── cursor-rules.mdc          # Main coding guidelines and best practices
+│       ├── self-improve.mdc           # Self-improvement rules
+│       └── project-structure.mdc      # This file - project structure documentation
+│
+└── tourism_vc_simulator/
+    ├── app.py                         # Main entry point - Streamlit app launcher
+    ├── 1_comparison.py                # Comparison page - 3D surface plots for scenarios A & B
+    ├── 2_whatif.py                    # What-If simulator page - Detailed KPI analysis
+    ├── README.md                      # Project documentation and setup instructions
+    ├── requirements.txt               # Python dependencies
+    │
+    └── utils/
+        ├── calculations.py            # Core business logic - scenario calculations and KPIs
+        └── plots.py                   # Visualization utilities - Plotly surface and scatter plots
+```
+
+## Important Files and Folders
+
+### Root Level
+
+#### `tourism_vc_simulator/app.py`
+- **Purpose**: Main application entry point
+- **Function**: Launches Streamlit app with tabbed interface
+- **Key Features**:
+  - Sets page configuration (wide layout)
+  - Creates two tabs: "Comparison View" and "What if Simulator"
+  - Dynamically imports and runs page modules (`1_comparison` and `2_whatif`)
+
+#### `tourism_vc_simulator/1_comparison.py`
+- **Purpose**: Comparison visualization page
+- **Function**: Displays multiple 3D surface plots comparing Scenario A vs Scenario B
+- **Key Features**:
+  - Interactive controls for global ranges and defaults
+  - Multiple surface plots showing profit/loss scenarios
+  - Color-coded visualizations (red=loss, green=profit)
+  - Uses `utils.calculations` for scenario computations
+  - Uses `utils.plots` for Plotly visualizations
+
+#### `tourism_vc_simulator/2_whatif.py`
+- **Purpose**: Detailed what-if analysis page
+- **Function**: Allows input of specific parameters and displays detailed KPIs
+- **Key Features**:
+  - Input controls for specific scenario parameters
+  - Side-by-side comparison of Scenario A and Scenario B
+  - Detailed KPI breakdowns for each scenario
+  - Uses `utils.calculations` for KPI computations
+
+#### `tourism_vc_simulator/README.md`
+- **Purpose**: Project documentation
+- **Contents**:
+  - File descriptions
+  - Setup instructions (virtual environment, dependencies)
+  - Running instructions
+  - Scenario descriptions (A: Paid VC, B: Free VC)
+
+#### `tourism_vc_simulator/requirements.txt`
+- **Purpose**: Python dependency management
+- **Dependencies**:
+  - streamlit
+  - numpy
+  - pandas
+  - plotly
+
+### Utils Directory (`tourism_vc_simulator/utils/`)
+
+#### `utils/calculations.py`
+- **Purpose**: Core business logic and financial calculations
+- **Key Functions**:
+  - `calc_scenario_A()`: Calculates Scenario A (Paid VC) metrics
+    - Revenue from VC fees
+    - VC costs
+    - Net profit calculations
+  - `calc_scenario_B()`: Calculates Scenario B (Free VC) metrics
+    - Premium revenue
+    - VC costs (company covers)
+    - Emergency insurance costs
+    - Net profit calculations
+  - `compute_kpis_A()`: Computes detailed KPIs for Scenario A
+  - `compute_kpis_B()`: Computes detailed KPIs for Scenario B
+
+#### `utils/plots.py`
+- **Purpose**: Visualization utilities using Plotly
+- **Key Functions**:
+  - `make_surface_plotly()`: Creates 3D surface plots with diverging color scale
+  - `make_4d_scatter_plotly()`: Creates interactive 4D scatter plots (3D + color dimension)
+
+### Cursor Rules Directory (`cursor/rules/`)
+
+#### `cursor/rules/cursor-rules.mdc`
+- **Purpose**: Main coding guidelines and best practices
+- **Focus**: Python, data analysis, visualization, Jupyter Notebook development
+- **Key Topics**: pandas, matplotlib, seaborn, numpy, Streamlit best practices
+
+#### `cursor/rules/self-improve.mdc`
+- **Purpose**: Self-improvement rules for AI assistant
+
+#### `cursor/rules/project-structure.mdc`
+- **Purpose**: This file - comprehensive project structure documentation
+
+## Business Logic Overview
+
+### Scenario A - Paid VC
+- Company charges tourists a fee for Virtual Clinic services
+- Revenue = VC fee × number of VC calls
+- Cost = VC cost × number of VC calls
+- Net profit = Revenue - Cost
+
+### Scenario B - Free VC
+- Company provides Virtual Clinic services for free
+- Revenue = Premium × total tourists
+- Cost = (VC cost × VC calls) + (Emergency premium × total tourists)
+- Net profit = Revenue - Total costs
+
+## Key Conventions
+
+1. **Page Modules**: Each Streamlit page (`1_comparison.py`, `2_whatif.py`) exports an `app()` function that contains the page logic
+2. **Modular Design**: Business logic separated into `utils/calculations.py`, visualization logic in `utils/plots.py`
+3. **Naming**: Page files use numeric prefixes for ordering (`1_`, `2_`)
+4. **Dependencies**: All Python dependencies listed in `requirements.txt`
+5. **Documentation**: README.md provides setup and usage instructions
+
+## Generated Files (Not in Version Control)
+
+- `__pycache__/`: Python bytecode cache directories
+- `.venv/`: Virtual environment directory (if created locally)
+
+## Development Workflow
+
+1. **Setup**: Create virtual environment and install dependencies from `requirements.txt`
+2. **Run**: Execute `streamlit run app.py` from the `tourism_vc_simulator/` directory
+3. **Modify**: 
+   - Update business logic in `utils/calculations.py`
+   - Update visualizations in `utils/plots.py`
+   - Modify pages in `1_comparison.py` or `2_whatif.py`
+   - Update app structure in `app.py`
