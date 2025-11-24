@@ -1,140 +1,22 @@
-# # utils/calculations.py
-# import math
-
-# def calc_scenario_A(n, sick_pct, pct_vc, vc_fee, vc_cost, referral_rate=0.25):
-#     """
-#     Scenario A (Paid VC)
-#     revenue = vc_fee * #vc_calls
-#     cost_vc = vc_cost * #vc_calls
-#     net_profit = revenue - cost_vc
-#     """
-#     sick_total = n * sick_pct
-
-#     vc_calls = sick_total * pct_vc
-
-#     revenue = vc_calls * vc_fee
-
-#     cost_vc = vc_calls * vc_cost
-
-#     net_profit = revenue - cost_vc
-
-#     # referrals = vc_calls * referral_rate
-#     total_op_visits = sick_total - vc_calls 
-#     return {
-#         "sick_total": sick_total,
-#         "vc_calls": vc_calls,
-#         "revenue": revenue,
-#         "cost_vc": cost_vc,
-#         "net_profit": net_profit,
-#         # "referrals": referrals,
-#         "Sick %" : sick_pct*100, 
-#         "% VC Uptake": pct_vc*100, 
-#         "VC Fee": vc_fee,
-#         "total_op_visits": total_op_visits
-#     }
-
-# def calc_scenario_B(n, premium, emergency_premium, sick_pct, pct_vc, vc_cost, referral_rate=0.25):
-#     """
-#     Scenario B (Free VC)
-#     revenue = premium * n
-#     cost_vc = vc_cost * #vc_calls
-#     cost_emergency = emergency_premium * n
-#     net_profit = revenue - cost_emergency - cost_vc
-#     """
-#     revenue = n * premium
-#     vc_calls = n * sick_pct * pct_vc
-
-#     cost_vc = vc_calls * vc_cost
- 
-#     cost_emergency = n * emergency_premium
-
-#     net_profit = revenue - cost_emergency - cost_vc
-#     # referrals = vc_calls * referral_rate
-
-#     total_op_visits = n * sick_pct - vc_calls 
-#     return {
-#         "sick_total": n * sick_pct,
-#         "vc_calls": vc_calls,
-#         "revenue": revenue,
-#         "cost_vc": cost_vc,
-#         "cost_emergency": cost_emergency,
-#         "net_profit": net_profit,
-#         "total_op_visits": total_op_visits, 
-
-#         "Sick %" : sick_pct*100, 
-#         "% VC Uptake": pct_vc*100, 
-#         "EI Fee": emergency_premium,
-#         "total_op_visits": total_op_visits
-
-
-
-#     }
-
-# # KPI calculators
-# def compute_kpis_A(resA, n):
-#     revenue = resA['revenue']
-#     cost_vc = resA['cost_vc']
-#     profit = resA['net_profit']
-#     profit_margin = profit / revenue if revenue != 0 else None
-#     per_tourist_rev = revenue / n
-#     per_tourist_cost = cost_vc / n
-#     breakeven_vc_fee = None
-#     # breakeven fee given current calls = cost per call
-#     if resA['vc_calls'] > 0:
-#         breakeven_vc_fee = cost_vc / resA['vc_calls']
-#     return {
-#         "VC Calls": int(round(resA['vc_calls'])),
-#         "Revenue (SAR)": revenue,
-#         "VC Cost (SAR)": cost_vc,
-#         "Net Profit (SAR)": profit,
-#         "Profit Margin": (profit_margin * 100.0) if profit_margin is not None else 'n/a',
-#         "Revenue per tourist (SAR)": per_tourist_rev,
-#         "Cost per tourist (SAR)": per_tourist_cost,
-#         "Break-even VC fee (SAR)": breakeven_vc_fee
-#     }
-
-# def compute_kpis_B(resB, n, premium):
-#     revenue = resB['revenue']
-#     cost_vc = resB['cost_vc']
-#     cost_emerg = resB['cost_emergency']
-#     profit = resB['net_profit']
-#     profit_margin = profit / revenue if revenue != 0 else None
-#     per_tourist_rev = revenue / n
-#     per_tourist_cost = (cost_vc + cost_emerg) / n
-#     pool_per_tourist = premium - (cost_emerg / n)
-#     return {
-#         "VC Calls": int(round(resB['vc_calls'])),
-#         "Revenue (SAR)": revenue,
-#         "VC Cost (SAR)": cost_vc,
-#         "Emergency Cost (SAR)": cost_emerg,
-#         "Net Profit (SAR)": profit,
-#         "Profit Margin": (profit_margin * 100.0) if profit_margin is not None else 'n/a',
-#         "Revenue per tourist (SAR)": per_tourist_rev,
-#         "Cost per tourist (SAR)": per_tourist_cost,
-#         "Pool per tourist (SAR)": pool_per_tourist
-#     }
-
 # utils/calculations.py
 import math
 import streamlit as st
 
-
 # Simplified healthcare service parameters
 DEFAULT_HEALTHCARE_PARAMS = {
-    'vc_to_hospital_pct': 0.18,  # 18% of VC users proceed to hospital
-    'avg_hospital_visit_cost': 485,  # SAR - Average cost per hospital visit (consultation + tests)
+    'vc_to_hospital_pct': 0.25,  # 25% of VC users proceed to hospital
+    'avg_hospital_visit_cost': 350,  # SAR - Average cost per hospital visit (consultation + tests)
     'avg_medicine_cost': 80,  # SAR - Average medicine cost per prescription
     
     # VC medicine prescription (for those who DON'T go to hospital)
     'vc_medicine_prescription_pct': 0.50,  # 60% of VC-only patients get medicine prescription
     
     # Hospital visitor utilization
-    'hospital_medicine_utilization': 0.95,  # 95% of hospital visitors get medicines
+    'hospital_medicine_utilization': 0.85,  # 85% of hospital visitors get medicines
     
     # Non-VC users hospital-seeking behavior
     'non_vc_hospital_seeking_pct': 0.05,  # 70% of sick tourists who skip VC will go to hospital
 }
-
 
 def calc_downstream_revenue(vc_calls, params=None):
     """
@@ -170,8 +52,6 @@ def calc_downstream_revenue(vc_calls, params=None):
         'avg_revenue_per_hospital_visit': (hospital_visit_revenue + hospital_medicine_revenue) / hospital_visitors if hospital_visitors > 0 else 0
     }
 
-
-
 @st.cache_data(show_spinner=False)
 def calc_scenario_A(n, sick_pct, pct_vc, vc_fee, vc_cost, referral_rate=0.25):
     """
@@ -191,7 +71,7 @@ def calc_scenario_A(n, sick_pct, pct_vc, vc_fee, vc_cost, referral_rate=0.25):
         "sick_total": sick_total,
         "vc_calls": vc_calls,
         "revenue": revenue,
-        "cost_vc": cost_vc,
+        "vc_cost": cost_vc,
         "net_profit": net_profit,
         "Sick %": sick_pct * 100, 
         "% VC Uptake": pct_vc * 100, 
@@ -219,7 +99,7 @@ def calc_scenario_B(n, premium, emergency_premium, sick_pct, pct_vc, vc_cost, re
         "sick_total": n * sick_pct,
         "vc_calls": vc_calls,
         "revenue": revenue,
-        "cost_vc": cost_vc,
+        "vc_cost": cost_vc,
         "cost_emergency": cost_emergency,
         "net_profit": net_profit,
         "total_op_visits": total_op_visits, 
@@ -229,10 +109,13 @@ def calc_scenario_B(n, premium, emergency_premium, sick_pct, pct_vc, vc_cost, re
         "total_op_visits": total_op_visits
     }
 
+
+
+
 @st.cache_data(show_spinner=False)
 def compute_kpis_A(resA, n):
     revenue = resA['revenue']
-    cost_vc = resA['cost_vc']
+    cost_vc = resA['vc_cost']
     profit = resA['net_profit']
     profit_margin = (profit / revenue * 100.0) if revenue != 0 else 0
     per_tourist_rev = revenue / n
@@ -256,7 +139,7 @@ def compute_kpis_A(resA, n):
 @st.cache_data(show_spinner=False)
 def compute_kpis_B(resB, n, premium):
     revenue = resB['revenue']
-    cost_vc = resB['cost_vc']
+    cost_vc = resB['vc_cost']
     cost_emerg = resB['cost_emergency']
     profit = resB['net_profit']
     profit_margin = (profit / revenue * 100.0) if revenue != 0 else 0
@@ -364,7 +247,7 @@ def calc_scenario_A_page_3(n, sick_pct, pct_vc, vc_fee, vc_cost, referral_rate=0
     }
 
 @st.cache_data(show_spinner=False)
-def calc_scenario_B_page_3(n, sick_pct, pct_vc, premium, vc_cost, page, referral_rate=0.25, healthcare_params=None):
+def calc_scenario_B_page_3(n, sick_pct, pct_vc, premium, vc_cost, page, ei_fee, referral_rate=0.25, healthcare_params=None):
     """
     Scenario B (Free VC) - Tourist pays insurance premium, VC included
     
@@ -463,15 +346,6 @@ def compute_kpis_A_page_3(resA, n):
     profit_margin = (profit / vc_revenue * 100.0) if vc_revenue != 0 else 0
     
     return {
-
-        "sick_total": resA['sick_total'],
-        "vc_calls": resA['vc_calls'],
-        "direct_hospital_visits": resA['direct_hospital_visits'],
-        "self_care_tourists": resA['self_care_tourists'],
-        "vc_to_hospital_patients": resA['vc_to_hospital_patients'],
-
-
-
         # Volume metrics
         "VC Calls": int(round(resA['vc_calls'])),
         "Hospital Visitors (from VC)": int(round(resA.get('hospital_visitors_from_vc', 0))),
@@ -511,25 +385,18 @@ def compute_kpis_A_page_3(resA, n):
 @st.cache_data(show_spinner=False)
 def compute_kpis_B_page_3(resB, n, premium):
     insurance_revenue = resB['revenue']
-    cost_vc = resB['vc_cost']
+    cost_vc = resB['cost_vc']
     profit = resB['net_profit']
     
     profit_margin = (profit / insurance_revenue * 100.0) if insurance_revenue != 0 else 0
     
     return {
-
-        "sick_total": resB['sick_total'],
-        "vc_calls": resB['vc_calls'],
-        "direct_hospital_visits": resB['direct_hospital_visits'],
-        "self_care_tourists": resB['self_care_tourists'],
-        "vc_to_hospital_patients": resB['vc_to_hospital_patients'],
-
         # Volume metrics
         "VC Calls": int(round(resB['vc_calls'])),
         "Hospital Visitors (from VC)": int(round(resB.get('hospital_visitors_from_vc', 0))),
         "VC-Only Patients": int(round(resB.get('vc_only_patients', 0))),
         "VC Medicine Patients": int(round(resB.get('vc_medicine_patients', 0))),
-        "VC Revenue (SAR)": 0,
+        
         # Insurance Company Financials
         "Insurance Revenue (SAR)": insurance_revenue,
         "VC Cost (SAR)": cost_vc,
