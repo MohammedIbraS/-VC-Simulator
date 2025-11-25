@@ -232,7 +232,7 @@ def app():
             </div>
         """, unsafe_allow_html=True)
         
-        col_input1, col_input2, col_input3 = st.columns(3)
+        col_input1, col_input2 = st.columns(2)
         with col_input1:
             n = st.number_input(
                 "Total Tourists (N)", 
@@ -251,14 +251,9 @@ def app():
                 help="Base insurance premium charged per tourist"
             )
             st.caption(f"💰 SAR {premium} per tourist")
-        with col_input3:
-            vc_cost = st.number_input(
-                "VC Delivery Cost (SAR)", 
-                min_value=0, 
-                value=50,
-                help="Cost to deliver one virtual consultation"
-            )
-            st.caption(f"💊 SAR {vc_cost} per VC call")
+        
+        # VC Cost is fixed and hidden from UI
+        vc_cost = 50  # Fixed VC delivery cost
 
     st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("---")

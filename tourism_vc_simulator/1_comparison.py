@@ -216,7 +216,7 @@ def app():
             </div>
         """, unsafe_allow_html=True)
         
-        col1, col2, col3 = st.columns(3)
+        col1, col2 = st.columns(2)
         with col1:
             n = st.number_input(
                 "Total Tourists (N)", 
@@ -236,15 +236,9 @@ def app():
                 help="Base insurance premium charged per tourist"
             )
             st.caption(f"💰 SAR {premium} per tourist")
-        with col3:
-            default_vc_cost = st.number_input(
-                "VC Delivery Cost (SAR)", 
-                min_value=1, 
-                value=50, 
-                key='vc_cost',
-                help="Cost to deliver one virtual consultation"
-            )
-            st.caption(f"💊 SAR {default_vc_cost} per VC call")
+        
+        # VC Cost is fixed and hidden from UI
+        default_vc_cost = 50  # Fixed VC delivery cost
         
         # Grid size option for performance
         grid_size = st.slider(
