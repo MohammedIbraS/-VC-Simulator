@@ -288,68 +288,52 @@ st.markdown("""
 with st.sidebar:
     st.markdown("""
         <div style="text-align: center; padding: 1rem 0;">
-            <h2 style="color: #1f77b4; margin-bottom: 0.5rem;">🏖️ VC Simulator</h2>
-            <p style="color: #666; font-size: 0.9rem;">Tourism Insurance + Virtual Clinic</p>
+            <h2 style="color: #1f77b4; margin-bottom: 0.5rem;">🏥 Healthcare Revenue</h2>
+            <p style="color: #666; font-size: 0.9rem;">Tourist Spending Analysis</p>
         </div>
     """, unsafe_allow_html=True)
     
     st.markdown("---")
     
-    st.markdown("### 📚 Navigation")
-    page = st.radio(
-        "Choose a page:",
-        ["🏥 Healthcare Revenue", "🎯 VC Cost - What-If Simulator", "📊 VC Cost - Sensitivity Analysis" ],
-        label_visibility="collapsed"
-    )
-    
-    st.markdown("---")
-    
-    with st.expander("ℹ️ About This App", expanded=False):
+    with st.expander("ℹ️ About This Analysis", expanded=False):
         st.markdown("""
-        **Tourism Virtual Clinic Simulator**
+        **Total Tourist Spending Analysis**
         
-        Compare two business models for Virtual Clinic services:
+        Compare total healthcare spending per tourist across two scenarios:
         
         - **Scenario A**: Paid VC (tourists pay per consultation)
         - **Scenario B**: Free VC (included in insurance premium)
         
-        **Pages:**
-        - **Sensitivity Analysis**: Explore parameter ranges and break-even points
-        - **What-If Simulator**: Test specific scenarios and get detailed KPIs
-        - **Healthcare Revenue**: Analyze total revenue including downstream services
+        This analysis includes:
+        - VC fees and consultations
+        - Hospital visits and medicine costs
+        - Patient care pathways
+        - Downstream revenue opportunities
         """)
     
     st.markdown("---")
     
     st.markdown("### 💡 Quick Tips")
     st.info("""
-    - Start with **Sensitivity Analysis** to understand parameter impacts
-    - Use **What-If Simulator** for specific scenario testing
-    - Check **Healthcare Revenue** for complete revenue modeling
-    - Adjust global parameters first, then scenario-specific ones
+    - Adjust **Global Parameters** first (Total Tourists, VC Cost)
+    - Configure **Healthcare Costs** (hospital visits, medicine)
+    - Set **Scenario Parameters** for each business model
+    - View **Patient Pathways** to understand care flows
+    - Check **Detailed Metrics** for comprehensive breakdowns
     """)
 
 # Welcome banner
 st.markdown("""
     <div class="welcome-banner">
-        <h1 style="color: white; border: none; padding: 0; margin: 0 0 0.5rem 0;">🏖️ Tourism Insurance + Virtual Clinic Simulator</h1>
+        <h1 style="color: white; border: none; padding: 0; margin: 0 0 0.5rem 0;">🏥 Total Tourist Spending Analysis</h1>
         <p style="font-size: 1.1rem; margin: 0; opacity: 0.95;">
-            Strategic decision support tool for comparing Virtual Clinic business models. 
-            Analyze profitability, identify break-even points, and optimize your strategy.
+            Compare total healthcare spending per tourist across Virtual Clinic business models. 
+            Analyze patient pathways, downstream revenue, and spending patterns.
         </p>
     </div>
 """, unsafe_allow_html=True)
 
-# Page routing
-if page == "📊 VC Cost - Sensitivity Analysis" or page == "":
-    with st.spinner("Loading Sensitivity Analysis..."):
-        module = import_module("1_comparison")
-        module.app()
-elif page == "🎯 VC Cost - What-If Simulator":
-    with st.spinner("Loading What-If Simulator..."):
-        module = import_module("2_whatif")
-        module.app()
-else:  # Healthcare Revenue
-    with st.spinner("Loading Healthcare Revenue Analysis..."):
-        module = import_module("3_healthcare_revenue")
-        module.app()
+# Load only Healthcare Revenue page
+with st.spinner("Loading Healthcare Revenue Analysis..."):
+    module = import_module("3_healthcare_revenue")
+    module.app()
