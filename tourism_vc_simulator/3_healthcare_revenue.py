@@ -203,15 +203,15 @@ def app():
         </style>
     """, unsafe_allow_html=True)
     
-    st.markdown("""
-        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                    padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
-            <h1 style="color: white; margin: 0;">🏥 Total Tourist Spending Analysis</h1>
-            <p style="color: white; opacity: 0.95; margin: 0.5rem 0 0 0;">
-                Compare total healthcare spending per tourist across both scenarios
-            </p>
-        </div>
-    """, unsafe_allow_html=True)
+    # st.markdown("""
+    #     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+    #                 padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+    #         <h1 style="color: white; margin: 0;">🏥 Total Tourist Spending Analysis</h1>
+    #         <p style="color: white; opacity: 0.95; margin: 0.5rem 0 0 0;">
+    #             Compare total healthcare spending per tourist across both scenarios
+    #         </p>
+    #     </div>
+    # """, unsafe_allow_html=True)
     
     # Global Parameters
     with st.expander("⚙️ **Global Parameters**", expanded=True):
